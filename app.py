@@ -2,7 +2,11 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, make_response, Response, request
 from werkzeug.exceptions import BadRequest, Unauthorized
 # from flask_cors import CORS
+
 from config import ProductionConfig
+from meal_max.db import db
+
+
 # Load environment variables from .env file
 load_dotenv()
 
@@ -206,8 +210,8 @@ def create_app(config_class=ProductionConfig):
     ##########################################################
 
 
-    @app.route('/api/create-meal', methods=['POST'])
-    def add_meal() -> Response:
+    @app.route('/api/create-favorite', methods=['POST'])
+    def add_favorite() -> Response:
         """
         Route to add a new meal to the database.
 
