@@ -2,14 +2,7 @@ from dotenv import load_dotenv
 from flask import Flask, jsonify, make_response, Response, request
 from werkzeug.exceptions import BadRequest, Unauthorized
 # from flask_cors import CORS
-
 from config import ProductionConfig
-from meal_max.db import db
-from meal_max.models.battle_model import BattleModel
-from meal_max.models.kitchen_model import Meals
-from meal_max.models.mongo_session_model import login_user, logout_user
-from meal_max.models.user_model import Users
-
 # Load environment variables from .env file
 load_dotenv()
 
