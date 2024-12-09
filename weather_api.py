@@ -16,8 +16,6 @@ logger = logging.getLogger(__name__)
 
 OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')
 BASE_URL = "https://api.openweathermap.org"
-FORECAST_URL = "https://pro.openweathermap.org/data/2.5/"
-CURRENT_URL = "https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m"
 
 
 def get_coordinates(city: str):
