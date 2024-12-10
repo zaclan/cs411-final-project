@@ -8,3 +8,4 @@ openmeteo_requests
 requests-cache
 pandas
 retry-requests
+pytest
