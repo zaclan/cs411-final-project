@@ -40,6 +40,10 @@ class FavoriteLocation(db.Model):
             ValueError: If the favorite location already exists or coordinates cannot be fetched.
             IntegrityError: If there's a database constraint violation.
         """
+        if location_name == None or location_name == "":
+            logger.warning(f"Invalid city name.")
+            raise ValueError("Invalid city name.")        
+        
         logger.info(f"Attempting to add favorite location '{location_name}' for user ID '{user_id}'.")
 
         # Check if the favorite location already exists for the user
