@@ -80,9 +80,24 @@ get_favorites() {
   echo "$response" | grep -q '"favorites":'
   if [ $? -eq 0 ]; then
     echo "Favorites retrieved successfully."
-    echo "$response" # Pretty print the response using jq (if installed)
+    echo "$response" 
   else
     echo "Failed to retrieve favorites. Response: $response"
+    exit 1
+  fi
+}
+
+get_favorites_with_weather() {
+  echo "Retrieving all favorite locations with weather..."
+  response=$(curl -s -X GET "$BASE_URL/api/favorites/weather?username=testuser&password=password456")
+
+  # Check the response for the list of favorites with weather
+  echo "$response" | grep -q '"favorites":'
+  if [ $? -eq 0 ]; then
+    echo "Favorites with weather retrieved successfully."
+    echo "$response"  # Print the raw response
+  else
+    echo "Failed to retrieve favorites with weather. Response: $response"
     exit 1
   fi
 }
@@ -97,7 +112,7 @@ get_weather_for_favorite() {
   echo "$response" | grep -q '"current_weather":'
   if [ $? -eq 0 ]; then
     echo "Weather for favorite location retrieved successfully."
-    echo "$response"  # Print the raw response
+    echo "$response"  
   else
     echo "Failed to retrieve weather for favorite location. Response: $response"
     exit 1
@@ -116,7 +131,7 @@ get_historical_weather_for_favorite() {
   echo "$response" | grep -q '"historical_weather":'
   if [ $? -eq 0 ]; then
     echo "Historical weather for favorite location retrieved successfully."
-    echo "$response"  # Print the raw response
+    echo "$response"  
   else
     echo "Failed to retrieve historical weather for favorite location. Response: $response"
     exit 1
@@ -134,7 +149,7 @@ get_forecast_for_favorite() {
   echo "$response" | grep -q '"weather_forecast":'
   if [ $? -eq 0 ]; then
     echo "Forecast for favorite location retrieved successfully."
-    echo "$response"  # Print the raw response
+    echo "$response"  
   else
     echo "Failed to retrieve forecast for favorite location. Response: $response"
     exit 1
