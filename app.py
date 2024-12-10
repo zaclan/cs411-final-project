@@ -231,16 +231,11 @@ def create_app(config_class=TestConfig):
             return jsonify({"error": "Internal server error."}), 500
 
         # Retrieve all favorites
-        favorites = FavoriteLocation.query.filter_by(user_id=user.id).all()
-        favorites_data = [{
-            "id": fav.id,
-            "location_name": fav.location_name,
-            "latitude": fav.latitude,
-            "longitude": fav.longitude
-        } for fav in favorites]
+        favorites = FavoriteLocation.get_all_favorites(user.id)
+
 
         logger.info(f"Retrieved all favorites for user '{user.username}'.")
-        return jsonify({"favorites": favorites_data}), 200
+        return jsonify({"favorites": favorites}), 200
 
 
     @app.route('/api/favorites/weather', methods=['GET'])
