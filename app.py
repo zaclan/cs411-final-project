@@ -338,6 +338,7 @@ def create_app(config_class=TestConfig):
             return jsonify({"error": "Could not fetch weather data."}), 500
 
 
+
     @app.route('/api/favorites/<int:favorite_id>/historical', methods=['GET'])
     def get_historical_weather_for_favorite(favorite_id):
         """
@@ -360,35 +361,32 @@ def create_app(config_class=TestConfig):
         except Unauthorized as ue:
             return jsonify({"error": str(ue)}), 401
         except Exception as e:
-            logger.error(f"Unexpected error during fetching historical weather: {e}")
+            logger.error(f"Unexpected error during authentication: {e}")
             return jsonify({"error": "Internal server error."}), 500
 
-        # Retrieve the specific favorite location
-        favorite = FavoriteLocation.query.filter_by(id=favorite_id, user_id=user.id).first()
-        if not favorite:
-            logger.error(f"Favorite location with ID '{favorite_id}' not found for user '{user.username}'.")
-            raise NotFound(f"Favorite location with ID '{favorite_id}' not found.")
-
-        # Fetch historical weather
+        # Call the class method to validate favorite location and retrieve coordinates
         try:
-            historical_weather = weather_api.get_historical_weather(favorite.latitude, favorite.longitude, start_date, end_date)
-            logger.info(f"Retrieved historical weather for favorite location '{favorite.location_name}'.")
+            latitude, longitude, start_date, end_date = FavoriteLocation.get_historical_weather(favorite_id, user.id, start_date, end_date)
+            
+            # Fetch historical weather using the retrieved coordinates
+            historical_weather = weather_api.get_historical_weather(latitude, longitude, start_date, end_date)
+            
+            logger.info(f"Retrieved historical weather for favorite location ID '{favorite_id}'.")
+            
             return jsonify({
                 "favorite_location": {
-                    "id": favorite.id,
-                    "location_name": favorite.location_name,
-                    "latitude": favorite.latitude,
-                    "longitude": favorite.longitude
+                    "id": favorite_id,
+                    "latitude": latitude,
+                    "longitude": longitude
                 },
                 "historical_weather": historical_weather['historical_weather']
             }), 200
         except ValueError as ve:
-            logger.error(f"Historical weather request error: {ve}")
+            logger.error(f"Error retrieving favorite location or historical weather: {ve}")
             return jsonify({"error": str(ve)}), 400
         except Exception as e:
-            logger.error(f"Error fetching historical weather for '{favorite.location_name}': {e}")
+            logger.error(f"Error fetching historical weather for favorite ID '{favorite_id}': {e}")
             return jsonify({"error": "Could not fetch historical weather data."}), 500
-
 
     @app.route('/api/favorites/<int:favorite_id>/forecast', methods=['GET'])
     def get_forecast_for_favorite(favorite_id):

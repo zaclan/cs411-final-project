@@ -84,3 +84,32 @@ class FavoriteLocation(db.Model):
         favorites = cls.query.filter_by(user_id=user_id).all()
         logger.debug(f"Found {len(favorites)} favorite locations for user ID '{user_id}'.")
         return favorites
+    
+
+    @classmethod
+    def get_historical_weather(cls, favorite_id: int, user_id: int, start_date: str, end_date: str) -> tuple:
+        """
+        Retrieve the latitude and longitude for a specific favorite location.
+
+        Args:
+            favorite_id (int): The ID of the favorite location.
+            user_id (int): The ID of the user.
+            start_date (str): The start date for historical weather in 'YYYY-MM-DD' format.
+            end_date (str): The end date for historical weather in 'YYYY-MM-DD' format.
+
+        Returns:
+            tuple: A tuple containing latitude, longitude, start_date, and end_date.
+
+        Raises:
+            ValueError: If the favorite location is not found.
+        """
+        # Retrieve the specific favorite location
+        favorite = cls.query.filter_by(id=favorite_id, user_id=user_id).first()
+        if not favorite:
+            logger.error(f"Favorite location with ID '{favorite_id}' not found for user ID '{user_id}'.")
+            raise ValueError(f"Favorite location with ID '{favorite_id}' not found.")
+        
+        logger.info(f"Retrieved favorite location '{favorite.location_name}' with coordinates: ({favorite.latitude}, {favorite.longitude}).")
+
+        # Return the coordinates and dates
+        return (favorite.latitude, favorite.longitude, start_date, end_date)
