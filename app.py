@@ -7,9 +7,6 @@ from config import ProductionConfig
 from meal_max.db import db
 
 
-# Load environment variables from .env file
-load_dotenv()
-
 def create_app(config_class=ProductionConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
