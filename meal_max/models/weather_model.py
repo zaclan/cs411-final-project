@@ -208,6 +208,99 @@ def get_historical_weather(lat, lon, start: str, end: str):
     return daily_dataframe
 
 
+
+def add_fav(city: str) -> None:
+    """
+    Adds a city and its weather data to the favorites table in the database.
+
+    Args:
+        city (str): The name of the city to be added.
+    """
+    try:
+        # Fetch coordinates and weather data
+        lat, lon = get_coordinates(city)
+        weather_data = get_current_weather(lat, lon)
+
+        # Insert data into the database
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO weather (
+                    city, lat, lon, elevation, timezone, utc_offset_seconds, 
+                    time, temperature, humidity, windspeed, precipitation
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                city,
+                weather_data["coordinates"]["latitude"],
+                weather_data["coordinates"]["longitude"],
+                weather_data["elevation"],
+                weather_data["timezone"],
+                weather_data["utc_offset_seconds"],
+                weather_data["current_weather"]["time"],
+                weather_data["current_weather"]["temperature"],
+                weather_data["current_weather"]["humidity"],
+                weather_data["current_weather"]["windspeed"],
+                weather_data["current_weather"]["precipitation"]
+            ))
+            conn.commit()
+
+        logger.info(f"City '{city}' with current weather data added to the database.")
+
+    except sqlite3.IntegrityError:
+        logger.error(f"City '{city}' is already in the favorites.")
+        raise ValueError(f"City '{city}' already exists in the favorites.")
+
+    except Exception as e:
+        logger.error(f"Failed to add city '{city}': {str(e)}")
+        raise
+
+
+def get_favs() -> list[dict]:
+    """
+    Retrieves the list of favorite cities along with their weather data.
+
+    Returns:
+        list[dict]: A list of dictionaries, each containing weather details of the favorite cities.
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT city, lat, lon, elevation, timezone, utc_offset_seconds, 
+                       time, temperature, humidity, windspeed, precipitation
+                FROM weather
+            """)
+            rows = cursor.fetchall()
+
+        favorites = []
+        for row in rows:
+            favorites.append({
+                "city": row[0],
+                "coordinates": {
+                    "latitude": row[1],
+                    "longitude": row[2]
+                },
+                "elevation": row[3],
+                "timezone": row[4],
+                "utc_offset_seconds": row[5],
+                "current_weather": {
+                    "time": row[6],
+                    "temperature": row[7],
+                    "humidity": row[8],
+                    "windspeed": row[9],
+                    "precipitation": row[10]
+                }
+            })
+
+        logger.info("Favorite cities retrieved successfully.")
+        return favorites
+
+    except sqlite3.Error as e:
+        logger.error(f"Database error: {str(e)}")
+        raise
+
+
 if __name__ == "__main__":
     lat, lon = get_coordinates('london')
     print(lat, lon)
@@ -217,75 +310,13 @@ if __name__ == "__main__":
     print(current)
     forecase = get_forecast(lat, lon)
     print(forecase)
-    from dataclasses import dataclass
-
-
-def add_fav(meal: str, cuisine: str, price: float, difficulty: str) -> None:
-    if not isinstance(price, (int, float)) or price <= 0:
-        raise ValueError(f"Invalid price: {price}. Price must be a positive number.")
-    if difficulty not in ['LOW', 'MED', 'HIGH']:
-        raise ValueError(f"Invalid difficulty level: {difficulty}. Must be 'LOW', 'MED', or 'HIGH'.")
-
-    try:
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute("""
-                INSERT INTO meals (meal, cuisine, price, difficulty)
-                VALUES (?, ?, ?, ?)
-            """, (meal, cuisine, price, difficulty))
-            conn.commit()
-
-            logger.info("Meal successfully added to the database: %s", meal)
-
-    except sqlite3.IntegrityError:
-        logger.error("Duplicate meal name: %s", meal)
-        raise ValueError(f"Meal with name '{meal}' already exists")
-
-    except sqlite3.Error as e:
-        logger.error("Database error: %s", str(e))
-        raise e
-
-def get_favs(sort_by: str="wins") -> dict[str, Any]:
-    query = """
-        SELECT id, meal, cuisine, price, difficulty, battles, wins, (wins * 1.0 / battles) AS win_pct
-        FROM meals WHERE deleted = false AND battles > 0
-    """
-
-    if sort_by == "win_pct":
-        query += " ORDER BY win_pct DESC"
-    elif sort_by == "wins":
-        query += " ORDER BY wins DESC"
-    else:
-        logger.error("Invalid sort_by parameter: %s", sort_by)
-        raise ValueError("Invalid sort_by parameter: %s" % sort_by)
-
-    try:
-        with get_db_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(query)
-            rows = cursor.fetchall()
-
-        leaderboard = []
-        for row in rows:
-            meal = {
-                'id': row[0],
-                'meal': row[1],
-                'cuisine': row[2],
-                'price': row[3],
-                'difficulty': row[4],
-                'battles': row[5],
-                'wins': row[6],
-                'win_pct': round(row[7] * 100, 1)  # Convert to percentage
-            }
-            leaderboard.append(meal)
-
-        logger.info("Leaderboard retrieved successfully")
-        return leaderboard
-
-    except sqlite3.Error as e:
-        logger.error("Database error: %s", str(e))
-        raise e
-
-
+    favorites = add_fav('london')
+    print(favorite)
+    favorites = add_fav('london')
+    print(favorite)
+    list = get_favs()
+    print(get_favs)
+	
+	
 
 
