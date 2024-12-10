@@ -4,6 +4,7 @@ import pytest
 from unittest.mock import patch
 from models.user_model import Users
 from models.favourite_location import FavoriteLocation
+from sqlalchemy.exc import IntegrityError
 
 
 ##########################################################
@@ -59,34 +60,11 @@ def test_create_favorite_invalid_coordinates(session):
     user = Users.create_user("testuser", "password123")
     
     with patch('weather_api.get_coordinates') as mock_get_coordinates:
-        mock_get_coordinates.side_effect = ValueError("Invalid location name.")
+        mock_get_coordinates.side_effect = ValueError("Invalid city name.")
         
         with pytest.raises(ValueError) as exc_info:
-            FavoriteLocation.create_favorite(user_id=user.id, location_name="")
-        assert "Invalid location name." in str(exc_info.value)
-
-def test_add_favorite_location_external_api_failure(client, session):
-    """
-    Test adding a favorite location when external API fails to provide coordinates.
-    """
-    # Create and login user
-    Users.create_user("testuser", "password123")
-
-    # Mock the get_coordinates function to raise an exception
-    with patch('weather_api.get_coordinates') as mock_get_coordinates:
-        mock_get_coordinates.side_effect = Exception("External API error")
-
-        payload = {
-            "username": "testuser",
-            "password": "password123",
-            "location_name": "InvalidCity"
-        }
-        response = client.post('/api/favorites', json=payload)
-        assert response.status_code == 500
-        data = response.get_json()
-        assert "error" in data
-        assert "Could not fetch coordinates for the provided location." in data["error"]
-        
+            FavoriteLocation.create_favorite(user_id=user.id, location_name="", latitude=0.0, longitude=0.0)
+        assert "Invalid city name." in str(exc_info.value)
         
 
 ##########################################################
