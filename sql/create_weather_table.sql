@@ -1,11 +1,14 @@
 DROP TABLE IF EXISTS weather;
 CREATE TABLE weather (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    meal TEXT NOT NULL UNIQUE,
-    cuisine TEXT NOT NULL,
-    price REAL NOT NULL,
-    difficulty TEXT CHECK(difficulty IN ('HIGH', 'MED', 'LOW')),
-    battles INTEGER DEFAULT 0,
-    wins INTEGER DEFAULT 0,
-    deleted BOOLEAN DEFAULT FALSE
+    city TEXT PRIMARY KEY,
+    lat REAL NOT NULL,
+    lon REAL NOT NULL,
+    elevation REAL NOT NULL,
+    timezone TEXT NOT NULL,
+    utc_offset_seconds INTEGER NOT NULL,
+    time TEXT NOT NULL,        
+    temperature REAL NOT NULL,
+    humidity REAL NOT NULL,
+    windspeed REAL NOT NULL,
+    precipitation REAL NOT NULL
 );
