@@ -1,6 +1,7 @@
 from db import db
 import logging
 from typing import Any, List, Optional
+from datetime import datetime, date
 
 from sqlalchemy import event
 from sqlalchemy.exc import IntegrityError
@@ -140,6 +141,13 @@ class FavoriteLocation(db.Model):
             logger.error(f"Favorite location with ID '{favorite_id}' not found for user ID '{user_id}'.")
             raise ValueError(f"Favorite location with ID '{favorite_id}' not found.")
         
+        # Validate and parse dates
+        try:
+            start_date_check, end_date_check = validate_dates(start_date, end_date)
+        except ValueError as ve:
+            logger.error(f"Date validation error: {ve}")
+            raise ValueError(str(ve))
+        
         logger.info(f"Retrieved favorite location '{favorite.location_name}' with coordinates: ({favorite.latitude}, {favorite.longitude}).")
 
         # Return the coordinates and dates
@@ -170,3 +178,41 @@ class FavoriteLocation(db.Model):
 
     
     
+def validate_dates(start_date_str: str, end_date_str: str) -> tuple:
+    """
+    Helper method that alidates and parses start and end dates.
+    
+    Args:
+        start_date_str (str): Start date in 'YYYY-MM-DD' format.
+        end_date_str (str): End date in 'YYYY-MM-DD' format.
+    
+    Returns:
+        tuple: Parsed start and end dates as datetime.date objects.
+    
+    Raises:
+        ValueError: If date formats are incorrect or logical inconsistencies are found.
+    """
+    try:
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
+    except ValueError:
+        raise ValueError("Invalid date format. Start date must be in 'YYYY-MM-DD' format.")
+    
+    try:
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
+    except ValueError:
+        raise ValueError("Invalid date format. End date must be in 'YYYY-MM-DD' format.")
+    
+    if start_date > end_date:
+        raise ValueError("Start date cannot be after end date.")
+    
+    # Optional: Check if dates are within a reasonable range
+    today = date.today()
+    if end_date > today:
+        raise ValueError("End date cannot be in the future.")
+    
+    # Optional: Check how far back historical data is available
+    earliest_date = date(1900, 1, 1)  # Example: Adjust based on API capabilities
+    if start_date < earliest_date:
+        raise ValueError(f"Start date cannot be before {earliest_date.isoformat()}.")
+    
+    return start_date, end_date
