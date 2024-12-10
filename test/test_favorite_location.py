@@ -92,30 +92,73 @@ def test_get_all_favorites(session):
     assert favorites[1].location_name == "Los Angeles"
 
 
-def test_get_all_favorites_with_weather_success(session):
+def test_get_current_weather_success(session):
     """
-    Test retrieving all favorite locations with current weather data.
+    Test retrieving current weather for an existing favorite location.
     """
     user = Users.create_user("testuser", "password123")
+    fav = FavoriteLocation.create_favorite(user_id=user.id, location_name="Berlin", latitude=52.5200, longitude=13.4050)
+    
+    latitude, longitude = FavoriteLocation.get_current_weather(favorite_id=fav.id, user_id=user.id)
+    assert latitude == 52.5200
+    assert longitude == 13.4050
 
-    with patch('weather_api.get_coordinates') as mock_get_coordinates, \
-         patch('weather_api.get_current_weather') as mock_get_current_weather:
-        
-        mock_get_coordinates.side_effect = [
-            (40.7128, -74.0060),  # New York
-            (34.0522, -118.2437)  # Los Angeles
-        ]
-        mock_get_current_weather.side_effect = [
-            {"current_weather": "Sunny"},
-            {"current_weather": "Cloudy"}
-        ]
 
-        FavoriteLocation.create_favorite(user.id, "New York", 40.7128, -74.0060)
-        FavoriteLocation.create_favorite(user.id, "Los Angeles", 34.0522, -118.2437 )
+def test_get_current_weather_not_found(session):
+    """
+    Test retrieving current weather for a non-existent favorite location.
+    """
+    user = Users.create_user("testuser", "password123")
+    
+    with pytest.raises(ValueError) as exc_info:
+        FavoriteLocation.get_current_weather(favorite_id=999, user_id=user.id)
+    assert "not found" in str(exc_info.value)
 
-    favorites_with_weather = FavoriteLocation.get_all_favorites(user.id)
-    assert len(favorites_with_weather) == 2
-    assert favorites_with_weather[0]["location_name"] == "New York"
-    assert favorites_with_weather[0]["current_weather"] == "Sunny"
-    assert favorites_with_weather[1]["location_name"] == "Los Angeles"
-    assert favorites_with_weather[1]["current_weather"] == "Cloudy"
+def test_get_historical_weather_success(session):
+    """
+    Test retrieving historical weather data for an existing favorite location.
+    """
+    user = Users.create_user("testuser", "password123")
+    fav = FavoriteLocation.create_favorite(user_id=user.id, location_name="Sydney", latitude=-33.8688, longitude=151.2093)
+    
+    latitude, longitude, start_date, end_date = FavoriteLocation.get_historical_weather(
+        favorite_id=fav.id,
+        user_id=user.id,
+        start_date="2024-01-01",
+        end_date="2024-01-07"
+    )
+    assert latitude == -33.8688
+    assert longitude == 151.2093
+    assert start_date == "2024-01-01"
+    assert end_date == "2024-01-07"
+
+def test_get_historical_weather_not_found(session):
+    """
+    Test retrieving historical weather data for a non-existent favorite location.
+    """
+    user = Users.create_user("testuser", "password123")
+    
+    with pytest.raises(ValueError) as exc_info:
+        FavoriteLocation.get_historical_weather(
+            favorite_id=999,
+            user_id=user.id,
+            start_date="2024-01-01",
+            end_date="2024-01-07"
+        )
+    assert "not found" in str(exc_info.value)
+
+def test_get_historical_weather_invalid(session):
+    """
+    Test retrieving historical weather data with invalid dates.
+    """
+    user = Users.create_user("testuser", "password123")
+    fav = FavoriteLocation.create_favorite(user_id=user.id, location_name="Toronto", latitude=43.6532, longitude=-79.3832)
+    
+    with pytest.raises(ValueError) as exc_info:
+        FavoriteLocation.get_historical_weather(
+            favorite_id=fav.id,
+            user_id=user.id,
+            start_date="2024-13-01",  # Invalid month
+            end_date="2024-12-32"     # Invalid day
+        )
+    assert "Invalid date format." in str(exc_info.value)
