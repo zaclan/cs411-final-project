@@ -141,5 +141,28 @@ class FavoriteLocation(db.Model):
         # Return the coordinates and dates
         return (favorite.latitude, favorite.longitude, start_date, end_date)
     
+    @classmethod
+    def get_forecast_details(cls, favorite_id: int, user_id: int) -> dict:
+        """
+        Retrieve details for fetching a weather forecast for a specific favorite location.
+
+        Args:
+            favorite_id (int): The ID of the favorite location.
+            user_id (int): The ID of the user.
+
+        Returns:
+            dict: A dictionary containing the favorite location's details.
+
+        Raises:
+            ValueError: If the favorite location is not found.
+        """
+        favorite = cls.query.filter_by(id=favorite_id, user_id=user_id).first()
+        if not favorite:
+            logger.error(f"Favorite location with ID '{favorite_id}' not found for user ID '{user_id}'.")
+            raise ValueError(f"Favorite location with ID '{favorite_id}' not found.")
+        
+        logger.info(f"Favorite location '{favorite.location_name}' found with coordinates ({favorite.latitude}, {favorite.longitude}).")
+        return (favorite.id, favorite.location_name, favorite.latitude, favorite.longitude)
+
     
     

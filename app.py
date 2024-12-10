@@ -418,34 +418,38 @@ def create_app(config_class=TestConfig):
         except Unauthorized as ue:
             return jsonify({"error": str(ue)}), 401
         except Exception as e:
-            logger.error(f"Unexpected error during fetching forecast: {e}")
+            logger.error(f"Unexpected error during authentication: {e}")
             return jsonify({"error": "Internal server error."}), 500
 
-        # Retrieve the specific favorite location
-        favorite = FavoriteLocation.query.filter_by(id=favorite_id, user_id=user.id).first()
-        if not favorite:
-            logger.error(f"Favorite location with ID '{favorite_id}' not found for user '{user.username}'.")
-            raise NotFound(f"Favorite location with ID '{favorite_id}' not found.")
+        # Retrieve forecast details using the FavoriteLocation class method
+        try:
+            forcast_id, forecast_location, forecast_latitude, forecast_longitude = FavoriteLocation.get_forecast_details(favorite_id, user.id)
+        except ValueError as ve:
+            logger.error(str(ve))
+            return jsonify({"error": str(ve)}), 404
+        except Exception as e:
+            logger.error(f"Unexpected error during forecast details retrieval: {e}")
+            return jsonify({"error": "Internal server error."}), 500
 
         # Fetch forecast
         try:
-            forecast = weather_api.get_forecast(favorite.latitude, favorite.longitude, days)
-            logger.info(f"Retrieved forecast for favorite location '{favorite.location_name}'.")
+            forecast = weather_api.get_forecast(
+                forecast_latitude,
+                forecast_longitude,
+                days
+            )
+            logger.info(f"Retrieved forecast for favorite location '{forecast_location}'.")
             return jsonify({
-                "favorite_location": {
-                    "id": favorite.id,
-                    "location_name": favorite.location_name,
-                    "latitude": favorite.latitude,
-                    "longitude": favorite.longitude
-                },
+                "favorite_location": [forcast_id, forecast_location, forecast_latitude, forecast_longitude],
                 "weather_forecast": forecast['daily_forecast']
             }), 200
         except ValueError as ve:
             logger.error(f"Forecast request error: {ve}")
             return jsonify({"error": str(ve)}), 400
         except Exception as e:
-            logger.error(f"Error fetching forecast for '{favorite.location_name}': {e}")
+            logger.error(f"Error fetching forecast for '{forecast_location}': {e}")
             return jsonify({"error": "Could not fetch weather forecast data."}), 500
+
         
         
     ####################################################
