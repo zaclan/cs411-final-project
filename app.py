@@ -17,13 +17,6 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# Initialize Flask app
-app = Flask(__name__)
-
-# Configure the database URI
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///weather_dashboard.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 def create_app(config_class=TestConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
