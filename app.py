@@ -232,10 +232,16 @@ def create_app(config_class=TestConfig):
 
         # Retrieve all favorites
         favorites = FavoriteLocation.get_all_favorites(user.id)
+        favorites_data = [{
+            "id": fav.id,
+            "location_name": fav.location_name,
+            "latitude": fav.latitude,
+            "longitude": fav.longitude
+        } for fav in favorites]
 
 
         logger.info(f"Retrieved all favorites for user '{user.username}'.")
-        return jsonify({"favorites": favorites}), 200
+        return jsonify({"favorites": favorites_data}), 200
 
 
     @app.route('/api/favorites/weather', methods=['GET'])
@@ -322,8 +328,12 @@ def create_app(config_class=TestConfig):
 
         # Fetch current weather
         try:
-            weather = weather_api.get_current_weather(favorite.latitude, favorite.longitude)
-            logger.info(f"Retrieved current weather for favorite location '{favorite.location_name}'.")
+            lat, lon = FavoriteLocation.get_current_weather(favorite_id, user.id)
+            
+            weather = weather_api.get_current_weather(lat, lon)
+            
+            logger.info(f"Retrieved current weather for favorite location ID {favorite_id}.")
+            
             return jsonify({
                 "favorite_location": {
                     "id": favorite.id,
