@@ -28,7 +28,7 @@ def create_app(config_class=TestConfig):
     
 
     # Helper function for user authentication
-    def authenticate_user(request_data):
+    def authenticate_user(request_data) -> Users:
         """
         Authenticates a user by verifying the provided username and password.
 
@@ -191,24 +191,9 @@ def create_app(config_class=TestConfig):
             logger.error(f"Unexpected error fetching coordinates: {e}")
             return jsonify({"error": "Could not fetch coordinates for the provided location."}), 500
 
-        # Check if favorite already exists
-        existing_fav = FavoriteLocation.query.filter_by(user_id=user.id, location_name=location_name).first()
-        if existing_fav:
-            logger.warning(f"Favorite location '{location_name}' already exists for user '{user.username}'.")
-            return jsonify({"error": f"Favorite location '{location_name}' already exists."}), 400
-
-        # Create new favorite location
-        new_favorite = FavoriteLocation(
-            user_id=user.id,
-            location_name=location_name,
-            latitude=lat,
-            longitude=lon
-        )
-
         try:
-            db.session.add(new_favorite)
-            db.session.commit()
-            logger.info(f"Favorite location '{location_name}' added for user '{user.username}'.")
+            new_favorite = FavoriteLocation.create_favorite(user_id=user.id, location_name=location_name, latitude=lat, longitude=lon)
+            logger.info('Favorite location added: %s', location_name)
             return jsonify({
                 "message": f"Favorite location '{location_name}' added successfully.",
                 "favorite_location": {
@@ -218,10 +203,10 @@ def create_app(config_class=TestConfig):
                     "longitude": new_favorite.longitude
                 }
             }), 201
-        except Exception as e:
-            db.session.rollback()
-            logger.error(f"Error adding favorite location: {e}")
+        except:
+            logger.error('Failed to add favorite location.')
             return jsonify({"error": "Internal server error."}), 500
+            
 
     @app.route('/api/favorites', methods=['GET'])
     def get_all_favorites():

@@ -34,13 +34,16 @@ class Users(db.Model):
         return salt, hashed_password
 
     @classmethod
-    def create_user(cls, username: str, password: str) -> None:
+    def create_user(cls, username: str, password: str) -> 'Users':
         """
         Create a new user with a salted, hashed password.
 
         Args:
             username (str): The username of the user.
             password (str): The password to hash and store.
+        
+        Returns:
+            Users: The newly created Users instance
 
         Raises:
             ValueError: If a user with the username already exists.
@@ -51,6 +54,7 @@ class Users(db.Model):
             db.session.add(new_user)
             db.session.commit()
             logger.info("User successfully added to the database: %s", username)
+            return new_user
         except IntegrityError:
             db.session.rollback()
             logger.error("Duplicate username: %s", username)
