@@ -6,8 +6,8 @@ import logging
 from dotenv import load_dotenv
 import os
 
-# from models.user_model import Users
-# from models.favourite_location import FavoriteLocation
+from models.user_model import Users
+from models.favourite_location import FavoriteLocation
 import weather_api
 from db import db
 
