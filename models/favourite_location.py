@@ -68,3 +68,19 @@ class FavoriteLocation(db.Model):
             db.session.rollback()
             logger.error(f"Unexpected error while adding favorite location '{location_name}': {e}")
             raise ValueError("An unexpected error occurred while adding the favorite location.")
+
+    @classmethod
+    def get_all_favorites(cls, user_id: int) -> List['FavoriteLocation']:
+        """
+        Retrieve all favorite locations for a user.
+
+        Args:
+            user_id (int): The ID of the user.
+
+        Returns:
+            List[FavoriteLocation]: A list of the user's favorite locations.
+        """
+        logger.info(f"Retrieving all favorite locations for user ID '{user_id}'.")
+        favorites = cls.query.filter_by(user_id=user_id).all()
+        logger.debug(f"Found {len(favorites)} favorite locations for user ID '{user_id}'.")
+        return favorites
