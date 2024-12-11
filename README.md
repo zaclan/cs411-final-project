@@ -258,9 +258,9 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "username": "newuser123", 
 
-        "current\_password": "oldpassword", 
+        "current_password": "oldpassword", 
 
-        "new\_password": "newsecurepassword" 
+        "new_password": "newsecurepassword" 
 
 } 
 ```
@@ -346,7 +346,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
       "username": "newuser123", 
 
-      "password": "securepassword",       "location\_name": "Paris" 
+      "password": "securepassword",       "location_name": "Paris" 
 
 } 
 ```
@@ -355,11 +355,11 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-      "message": "Favorite location 'Paris' added successfully.",   "favorite\_location": { 
+      "message": "Favorite location 'Paris' added successfully.",   "favorite_location": { 
 
       "id": 1, 
 
-      "location\_name": "Paris", 
+      "location_name": "Paris", 
 
       "latitude": 48.8566, 
 
