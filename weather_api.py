@@ -19,7 +19,19 @@ BASE_URL = "https://api.openweathermap.org"
 
 
 def get_coordinates(city: str):
-    
+    """
+    Fetches geographical coordinates (latitude and longitude) for a given city using OpenWeather's Geo API.
+
+    Args:
+        city (str): The name of the city to fetch coordinates for.
+
+    Returns:
+        tuple: A tuple containing latitude and longitude as floats.
+
+    Raises:
+        HTTPError: If the API request fails or returns an error.
+        KeyError: If the response does not contain valid coordinates.
+    """
     url =f"{BASE_URL}/geo/1.0/direct?q={city}&limit=5&appid={OPENWEATHER_API_KEY}"
     response = requests.get(url)
     response.raise_for_status()
@@ -28,6 +40,19 @@ def get_coordinates(city: str):
     return lat, lon
 
 def get_current_weather(lat, lon):
+    """
+    Retrieves the current weather data for a given location using Open-Meteo API.
+
+    Args:
+        lat (float): Latitude of the location.
+        lon (float): Longitude of the location.
+
+    Returns:
+        dict: A dictionary containing current weather information
+
+    Raises:
+        Exception: If there is an error fetching current the weather data.
+    """
     # Setup the Open-Meteo API client with cache and retry on error
     cache_session = requests_cache.CachedSession('.cache', expire_after = 3600)
     retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
@@ -84,6 +109,21 @@ def get_current_weather(lat, lon):
     
 
 def get_forecast(lat, lon, days=7):
+    """
+    Fetches a weather forecast for the specified number of days at a given location using Open-Meteo API.
+
+    Args:
+        lat (float): Latitude of the location.
+        lon (float): Longitude of the location.
+        days (int): Number of forecast days (maximum 16).
+
+    Returns:
+        dict: A dictionary containing daily forecast data for the specified number of days.
+
+    Raises:
+        ValueError: If the number of days exceeds 16.
+        Exception: If there is an error fetching or processing the forecast data.
+    """
     if (days > 16):
         logger.error("Maximum number of days possible is 16.")
         return {"error" : "Forecast days exceeded."}
