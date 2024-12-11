@@ -190,7 +190,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
   { 
 
-      "message": "User 'newuser123' authenticated successfully."**
+      "message": "User 'newuser123' authenticated successfully."
   }
 ```
 
