@@ -62,7 +62,7 @@ The API uses Docker for containerisation. The user and location data is stored i
     ```
 ## **Routes Documentation 
 
-## /create-account** 
+## **/create-account** 
 
 - **Request Type**: POST 
 - **Purpose**: Creates a new user account with a username and password. 
@@ -73,7 +73,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Success Response Example**: 
 - **Code**: 201 
 
-**Content**:
+-**Content**:
 ```json 
 
 { 
@@ -86,7 +86,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Code**: 400
 
 - **Content**:
-  ```json 
+```json 
 
 { 
 
@@ -97,7 +97,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Error Response Example** (unexpected error): 
 - **Code**: 500 
 
-**Content**:
+- **Content**:
 ```json 
 
 { 
@@ -110,13 +110,13 @@ The API uses Docker for containerisation. The user and location data is stored i
 **Example Request**:
 ```json 
 
-{** 
+{
             "username": "newuser123", 
 
             "password": "securepassword" 
 
 } 
-
+```
 **Example Response**:
 ```json 
 
@@ -175,7 +175,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 ```
 
 - **Example Request**:
-  ```json 
+```json 
 
   { 
 
@@ -200,8 +200,8 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Purpose**: Updates a user's password by verifying the current password and setting a new one. 
 - **Request Body**: 
 - username (String): The username of the user requesting the password change. 
-- current\_password (String): The current password of the user to verify their identity. 
-- new\_password (String): The new password that the user wants to set. 
+- current_password (String): The current password of the user to verify their identity. 
+- new_password (String): The new password that the user wants to set. 
 - **Response Format**: JSON 
 - **Success Response Example**: 
 - **Code**: 200 
@@ -252,7 +252,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 } 
 ```
 - **Example Request**:
-  ```json 
+```json 
 
   { 
 
@@ -269,7 +269,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
   { 
 
-      "message": "Password updated successfully for user 'newuser123'."**
+      "message": "Password updated successfully for user 'newuser123'."
   }
 ```
 ## **/api/favorites (POST)** 
@@ -279,7 +279,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Request Body**: 
 - username (String): The username of the user adding the favorite location. 
 - password (String): The password of the user to authenticate. 
-- location\_name (String): The name of the location to be added to the favorites. 
+- location_name (String): The name of the location to be added to the favorites. 
 - **Response Format**: JSON 
 - **Success Response Example**: 
 - **Code**: 201 
@@ -291,11 +291,11 @@ The API uses Docker for containerisation. The user and location data is stored i
 
     "message": "Favorite location 'Paris' added successfully.", 
 
-    "favorite\_location": { 
+    "favorite_location": { 
 
     "id": 1, 
 
-    "location\_name": "Paris", 
+    "location_name": "Paris", 
 
     "latitude": 48.8566, 
 
@@ -304,7 +304,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 } 
 } 
 ```
-- **Error Response Example** (e.g., missing location\_name): 
+- **Error Response Example** (e.g., missing location_name): 
 - **Code**: 400 
 
 **Content**:
@@ -312,7 +312,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-    "error": "Invalid request payload. 'location\_name' is required."
+    "error": "Invalid request payload. 'location_name' is required."
 } 
 ```
 - **Error Response Example** (authentication failure): 
@@ -340,13 +340,15 @@ The API uses Docker for containerisation. The user and location data is stored i
 } 
 ```
 - **Example Request**:
-  ```json 
+```json 
 
   { 
 
       "username": "newuser123", 
 
-      "password": "securepassword",       "location_name": "Paris" 
+      "password": "securepassword",
+
+      "location_name": "Paris" 
 
 } 
 ```
@@ -392,7 +394,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 1, 
 
-        "location\_name": "Paris", 
+        "location_name": "Paris", 
 
         "latitude": 48.8566, 
 
@@ -404,7 +406,9 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 2, 
 
-        "location\_name": "New York",       "latitude": 40.7128, 
+        "location_name": "New York",
+
+        "latitude": 40.7128, 
 
         "longitude": -74.0060 
 
@@ -458,7 +462,7 @@ The API uses Docker for containerisation. The user and location data is stored i
   GET /api/favorites?username=newuser123&password=securepassword 
   ```
 - **Example Response**:
-  ```json 
+```json 
 { 
 
     "favorites": [ 
@@ -467,7 +471,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 1, 
 
-        "location\_name": "Paris", 
+        "location_name": "Paris", 
 
         "latitude": 48.8566, 
 
@@ -479,7 +483,9 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 2, 
 
-        "location\_name": "New York",       "latitude": 40.7128, 
+        "location_name": "New York",       
+        
+        "latitude": 40.7128, 
 
         "longitude": -74.0060 
 
@@ -488,7 +494,7 @@ The API uses Docker for containerisation. The user and location data is stored i
   ] 
 
   }
-  ```
+```
 
 ## **/api/favorites/weather (GET)** 
 
@@ -501,7 +507,6 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Success Response Example**: 
 
 • **Code**: 200 
-11 of 21
 
 **Content**:
 ```json 
@@ -514,13 +519,13 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 1, 
 
-        "location\_name": "Paris", 
+        "location_name": "Paris", 
 
         "latitude": 48.8566, 
 
         "longitude": 2.3522, 
 
-        "current\_weather": { 
+        "current_weather": { 
 
             "time": "2024-12-10T15:30:00Z"
 
@@ -540,13 +545,13 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 2, 
 
-        "location\_name": "New York", 
+        "location_name": "New York", 
 
         "latitude": 40.7128, 
 
         "longitude": -74.0060, 
 
-        "current\_weather": { 
+        "current_weather": { 
 
               "time": "2024-12-10T15:30:00Z"
 
@@ -620,13 +625,13 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 1, 
 
-        "location\_name": "Paris", 
+        "location_name": "Paris", 
 
         "latitude": 48.8566, 
 
         "longitude": 2.3522, 
 
-        "current\_weather": { 
+        "current_weather": { 
 
             "time": "2024-12-10T15:30:00Z"
 
@@ -646,13 +651,13 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "id": 2, 
 
-        "location\_name": "New York", 
+        "location_name": "New York", 
 
         "latitude": 40.7128, 
 
         "longitude": -74.0060, 
 
-        "current\_weather": { 
+        "current_weather": { 
 
             "time": "2024-12-10T15:30:00Z"
 
@@ -687,17 +692,17 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-    "favorite\_location": { 
+    "favorite_location": { 
 
         "id": 1, 
 
-        "location\_name": "Paris", 
+        "location_name": "Paris", 
 
         "latitude": 48.8566, 
 
         "longitude": 2.3522, 
 
-        "current\_weather": { 
+        "current_weather": { 
 
             "time": "2024-12-10T15:30:00Z" 
 
@@ -767,17 +772,17 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-    "favorite\_location": { 
+    "favorite_location": { 
 
       "id": 1, 
 
-      "location\_name": "Paris", 
+      "location_name": "Paris", 
 
       "latitude": 48.8566, 
 
       "longitude": 2.3522, 
 
-      "current\_weather": { 
+      "current_weather": { 
 
               "time": "2024-12-10T15:30:00Z"
 
@@ -798,12 +803,12 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Request Type**: GET 
 - **Purpose**: Retrieves historical weather data for a specific favorite location. 
 - **Path Parameters**: 
-- favorite\_id (int, required): The ID of the favorite location whose historical weather data is being retrieved. 
+- favorite_id (int, required): The ID of the favorite location whose historical weather data is being retrieved. 
 - **Query Parameters**: 
 - username (string, required): The username of the account. 
 - password (string, required): The password of the account. 
-- start\_date (string, required): The start date for the historical weather data in 'YYYY-MM-DD' format. 
-- end\_date (string, required): The end date for the historical weather data in 'YYYY-MM-DD' format. 
+- start_date (string, required): The start date for the historical weather data in 'YYYY-MM-DD' format. 
+- end_date (string, required): The end date for the historical weather data in 'YYYY-MM-DD' format. 
 - **Response Format**: JSON 
 - **Success Response Example**: 
 - **Code**: 200 
@@ -813,7 +818,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-    "favorite\_location": { 
+    "favorite_location": { 
 
       "id": 1, 
 
@@ -823,27 +828,27 @@ The API uses Docker for containerisation. The user and location data is stored i
 
     }, 
 
-    "historical\_weather": [ 
+    "historical_weather": [ 
 
       { 
 
         "date": "2024-12-01" 
 
-        "temperature\_2m\_max": 15.2 
+        "temperature_2m_max": 15.2 
 
-        "temperature\_2m\_min": 10.5 
+        "temperature_2m_min": 10.5 
 
-        "apparent\_temperature\_max": 16.8
+        "apparent_temperature_max": 16.8
 
-        "apparent\_temperature\_min": 9.0  
+        "apparent_temperature_min": 9.0  
 
-        "daylight\_duration": 9.8  
+        "daylight_duration": 9.8  
 
-        "precipitation\_sum": 0.1 
+        "precipitation_sum": 0.1 
 
-        "precipitation\_probability\_max": 20
+        "precipitation_probability_max": 20
 
-        "wind\_speed\_10m\_max": 7.3 
+        "wind_speed_10m_max": 7.3 
 
         … 
 
@@ -861,7 +866,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-    "error": "Missing 'username', 'password', 'start\_date', or 'end\_date' query parameters." 
+    "error": "Missing 'username', 'password', 'start_date', or 'end_date' query parameters." 
 
 } 
 ```
@@ -907,7 +912,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 ```json
 { 
 
-    "favorite\_location": { 
+    "favorite_location": { 
 
       "id": 1, 
 
@@ -917,27 +922,27 @@ The API uses Docker for containerisation. The user and location data is stored i
 
     }, 
 
-    "historical\_weather": [ 
+    "historical_weather": [ 
 
       { 
 
         "date": "2024-12-01" 
 
-        "temperature\_2m\_max": 15.2 
+        "temperature_2m_max": 15.2 
 
-        "temperature\_2m\_min": 10.5 
+        "temperature_2m_min": 10.5 
 
-        "apparent\_temperature\_max": 16.8
+        "apparent_temperature_max": 16.8
 
-        "apparent\_temperature\_min": 9.0  
+        "apparent_temperature_min": 9.0  
 
-        "daylight\_duration": 9.8  
+        "daylight_duration": 9.8  
 
-        "precipitation\_sum": 0.1 
+        "precipitation_sum": 0.1 
 
-        "precipitation\_probability\_max": 20
+        "precipitation_probability_max": 20
 
-        "wind\_speed\_10m\_max": 7.3 
+        "wind_speed_10m_max": 7.3 
 
         … 
 
@@ -953,7 +958,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 - **Request Type**: GET 
 - **Purpose**: Retrieves the weather forecast for a specific favorite location. 
 - **Path Parameters**: 
-- favorite\_id (int, required): The ID of the favorite location whose weather forecast is being retrieved. 
+- favorite_id (int, required): The ID of the favorite location whose weather forecast is being retrieved. 
 - **Query Parameters**: 
 - username (string, required): The username of the account. 
 - password (string, required): The password of the account. 
@@ -967,7 +972,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-    "favorite\_location": [ 
+    "favorite_location": [ 
 
           "id": 123 
 
@@ -977,27 +982,27 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 },  
 
-"historical\_weather": [  
+"historical_weather": [  
 
         {  
 
             "date": "2024-12-01" 
 
-            "temperature\_2m\_max": 15.2 
+            "temperature_2m_max": 15.2 
 
-            "temperature\_2m\_min": 10.5 
+            "temperature_2m_min": 10.5 
 
-            "apparent\_temperature\_max": 16.8 
+            "apparent_temperature_max": 16.8 
 
-            "apparent\_temperature\_min": 9.0  
+            "apparent_temperature_min": 9.0  
 
-            "daylight\_duration": 9.8 
+            "daylight_duration": 9.8 
 
-            "precipitation\_sum": 0.1 
+            "precipitation_sum": 0.1 
 
-            "precipitation\_probability\_max": 20 
+            "precipitation_probability_max": 20 
 
-            "wind\_speed\_10m\_max": 7.3  
+            "wind_speed_10m_max": 7.3  
 
         }, 
         … 
@@ -1059,7 +1064,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 ```json
 { 
 
-    "favorite\_location": [ 
+    "favorite_location": [ 
 
           "id": 123 
 
@@ -1069,27 +1074,27 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 },  
 
-"historical\_weather": [  
+"historical_weather": [  
 
         {  
 
             "date": "2024-12-01" 
 
-            "temperature\_2m\_max": 15.2 
+            "temperature_2m_max": 15.2 
 
-            "temperature\_2m\_min": 10.5 
+            "temperature_2m_min": 10.5 
 
-            "apparent\_temperature\_max": 16.8 
+            "apparent_temperature_max": 16.8 
 
-            "apparent\_temperature\_min": 9.0  
+            "apparent_temperature_min": 9.0  
 
-            "daylight\_duration": 9.8 
+            "daylight_duration": 9.8 
 
-            "precipitation\_sum": 0.1 
+            "precipitation_sum": 0.1 
 
-            "precipitation\_probability\_max": 20 
+            "precipitation_probability_max": 20 
 
-            "wind\_speed\_10m\_max": 7.3  
+            "wind_speed_10m_max": 7.3  
 
         }, 
         … 
@@ -1145,7 +1150,7 @@ sh smoktest.sh
   - Migrate
   - request
   - response
-  - make\_response
+  - make_response
   - jsonify
   - pytest
   - python-dotenv
