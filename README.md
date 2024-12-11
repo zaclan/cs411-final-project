@@ -920,7 +920,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
       "longitude": 2.3522 
 
-    }, 
+    } 
 
     "historical_weather": [ 
 
@@ -944,7 +944,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "wind_speed_10m_max": 7.3 
 
-        … 
+        . . .
 
       } 
 
@@ -980,7 +980,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
           "longitude": -74.0060  
 
-},  
+    ]  
 
 "historical_weather": [  
 
@@ -1004,8 +1004,8 @@ The API uses Docker for containerisation. The user and location data is stored i
 
             "wind_speed_10m_max": 7.3  
 
-        }, 
-        … 
+        }
+        . . . 
 
     ] 
 
@@ -1072,7 +1072,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
           "longitude": -74.0060  
 
-},  
+    ] 
 
 "historical_weather": [  
 
@@ -1097,7 +1097,7 @@ The API uses Docker for containerisation. The user and location data is stored i
             "wind_speed_10m_max": 7.3  
 
         }, 
-        … 
+        . . .
 
     ] 
 
