@@ -1,5 +1,3 @@
-﻿8 of 21
-
 **Overview** 
 
 The Weather Viewing Application is a simple tool to obtain weather data for specific or favorite locations of a user. The user can save their most frequented or favorite locations and access their current, historical, and forecasted weather data.  
