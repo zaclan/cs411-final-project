@@ -18,6 +18,15 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 def create_app(config_class=TestConfig):
+"""
+    Creates and configures the Flask application.
+
+    Args:
+        config_class (class): The configuration class to use (default: TestConfig).
+
+    Returns:
+        Flask: Configured Flask application instance.
+"""
     app = Flask(__name__)
     app.config.from_object(config_class)
     
@@ -73,7 +82,11 @@ def create_app(config_class=TestConfig):
     def create_account() -> Response:
         """
         Route to create a new user account.
+        
         Expects 'username' and 'password' in the JSON body.
+        
+        Returns:
+            Response: JSON response with success or error message.
         """
         data = request.get_json()
         if not data or 'username' not in data or 'password' not in data:
@@ -98,7 +111,11 @@ def create_app(config_class=TestConfig):
     def login():
         """
         Route to authenticate a user.
+        
         Expects 'username' and 'password' in the JSON body.
+        
+        Returns:
+            Response: JSON response with success or error message.
         """
         data = request.get_json()
         if not data or 'username' not in data or 'password' not in data:
@@ -119,7 +136,11 @@ def create_app(config_class=TestConfig):
     def update_password():
         """
         Route to update a user's password.
+        
         Expects 'username', 'current_password', and 'new_password' in the JSON body.
+
+        Returns:
+            Response: JSON response with success or error message.
         """
         data = request.get_json()
         if not data or 'username' not in data or 'current_password' not in data or 'new_password' not in data:
@@ -163,7 +184,11 @@ def create_app(config_class=TestConfig):
     def add_favorite_location():
         """
         Route to add a new favorite location for a user.
+        
         Expects 'username', 'password', and 'location_name' in the JSON body.
+        
+        Returns:
+            Response: JSON response with favorite location name or error message.
         """
         data = request.get_json()
         if not data or 'location_name' not in data:
@@ -212,7 +237,11 @@ def create_app(config_class=TestConfig):
     def get_all_favorites():
         """
         Route to retrieve all favorite locations for a user.
+        
         Expects 'username' and 'password' as query parameters.
+        
+        Returns:
+            Response: JSON response with a list of favorite locations.
         """
         username = request.args.get('username')
         password = request.args.get('password')
@@ -248,7 +277,16 @@ def create_app(config_class=TestConfig):
     def get_all_favorites_with_weather():
         """
         Route to retrieve all favorite locations for a user along with their current weather.
-        Expects 'username' and 'password' as query parameters.
+
+        Query Parameters:
+        - username (str, required): The username of the account.
+        - password (str, required): The password of the account.
+
+        Returns:
+        - 200: A JSON object containing a list of favorite locations with their weather details.
+        - 400: Missing 'username' or 'password' query parameters.
+        - 401: Unauthorized access due to invalid credentials.
+        - 500: Internal server error.
         """
         username = request.args.get('username')
         password = request.args.get('password')
@@ -302,7 +340,20 @@ def create_app(config_class=TestConfig):
     def get_weather_for_favorite(favorite_id):
         """
         Route to retrieve current weather for a specific favorite location.
-        Expects 'username' and 'password' as query parameters.
+        
+        Path Parameters:
+        - favorite_id (int, required): The ID of the favorite location.
+
+        Query Parameters:
+        - username (str, required): The username of the account.
+        - password (str, required): The password of the account.
+
+        Returns:
+        - 200: A JSON object containing the current weather for the specified favorite location.
+        - 400: Missing 'username' or 'password' query parameters.
+        - 401: Unauthorized access due to invalid credentials.
+        - 404: Favorite location not found for the specified user.
+        - 500: Internal server error or issue fetching weather data.
         """
         username = request.args.get('username')
         password = request.args.get('password')
@@ -353,9 +404,24 @@ def create_app(config_class=TestConfig):
     def get_historical_weather_for_favorite(favorite_id):
         """
         Route to retrieve historical weather data for a specific favorite location.
-        Expects 'username', 'password', 'start_date', and 'end_date' as query parameters.
-        Dates should be in 'YYYY-MM-DD' format.
+
+        Path Parameters:
+        - favorite_id (int, required): The ID of the favorite location.
+
+        Query Parameters:
+        - username (str, required): The username of the account.
+        - password (str, required): The password of the account.
+        - start_date (str, required): The start date for historical weather data in 'YYYY-MM-DD' format.
+        - end_date (str, required): The end date for historical weather data in 'YYYY-MM-DD' format.
+
+        Returns:
+        - 200: A JSON object containing the historical weather data for the specified favorite location.
+        - 400: Missing required query parameters or invalid date range.
+        - 401: Unauthorized access due to invalid credentials.
+        - 404: Favorite location not found for the specified user.
+        - 500: Internal server error or issue fetching historical weather data.
         """
+
         username = request.args.get('username')
         password = request.args.get('password')
         start_date = request.args.get('start_date')
@@ -402,8 +468,23 @@ def create_app(config_class=TestConfig):
     def get_forecast_for_favorite(favorite_id):
         """
         Route to retrieve weather forecast for a specific favorite location.
-        Expects 'username', 'password', and optional 'days' as query parameters.
+
+        Path Parameters:
+        - favorite_id (int, required): The ID of the favorite location.
+
+        Query Parameters:
+        - username (str, required): The username of the account.
+        - password (str, required): The password of the account.
+        - days (int, optional): The number of days to retrieve the forecast for (default is 7).
+
+        Returns:
+        - 200: A JSON object containing the weather forecast for the specified favorite location.
+        - 400: Missing required query parameters or invalid forecast request.
+        - 401: Unauthorized access due to invalid credentials.
+        - 404: Favorite location not found for the specified user.
+        - 500: Internal server error or issue fetching forecast data.
         """
+        
         username = request.args.get('username')
         password = request.args.get('password')
         days = request.args.get('days', default=7, type=int)
