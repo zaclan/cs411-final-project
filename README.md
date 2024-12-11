@@ -1,4 +1,4 @@
-**Overview** 
+## **Overview** 
 
 The Weather Viewing Application is a simple tool to obtain weather data for specific or favorite locations of a user. The user can save their most frequented or favorite locations and access their current, historical, and forecasted weather data.  
 
@@ -42,25 +42,27 @@ includes temperature, precipitation, daylight duration, and wind speed.
 
 The API uses Docker for containerisation. The user and location data is stored in SQLAlchemy. 
 
-**Setup Instructions** 
+## **Setup Instructions** 
 
-**Using Docker** 
+## **Using Docker** 
 
 1. **Build the Docker image:**  
-
-docker build -t ${IMAGE\_NAME}:${CONTAINER\_TAG}   . 
-
+    ```bash
+    docker build -t ${IMAGE\_NAME}:${CONTAINER\_TAG}   . 
+    ```
 2. **Run the Docker Container:** 
+    ```bash
+    docker run -d \ 
 
-docker run -d \ 
+    --name ${IMAGE\_NAME}\_container \ 
 
-` `--name ${IMAGE\_NAME}\_container \ 
+    --env-file .env \ 
 
-`  `--env-file .env \ 
+    -p ${HOST\_PORT}:${CONTAINER\_PORT} \ -v ${DB\_VOLUME\_PATH}:/app/db \ ${IMAGE\_NAME}:${CONTAINER\_TAG} 
+    ```
+## **Routes Documentation 
 
--p ${HOST\_PORT}:${CONTAINER\_PORT} \ -v ${DB\_VOLUME\_PATH}:/app/db \ ${IMAGE\_NAME}:${CONTAINER\_TAG} 
-
-**Routes Documentation /create-account** 
+## /create-account** 
 
 - **Request Type**: POST 
 - **Purpose**: Creates a new user account with a username and password. 
@@ -71,53 +73,61 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 201 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"message": "Account created successfully for user 'newuser123'."   } 
+    "message": "Account created successfully for user 'newuser123'."
+}
+```
 
 - **Error Response Example** (e.g., missing fields): 
-- **Code**: 400 
+- **Code**: 400
 
-**Content**:json 
+- **Content**:
+  ```json 
 
 { 
 
-` `"error": "Invalid request payload. 'username' and 'password' are required." 
+  "error": "Invalid request payload. 'username' and 'password' are required." 
 
 } 
-
+```
 - **Error Response Example** (unexpected error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Internal server error." 
+    "error": "Internal server error." 
 
-} 
+}
+```
 
-**Example Request**:json 
+**Example Request**:
+```json 
 
 {** 
+            "username": "newuser123", 
 
-`           `"username": "newuser123", 
-
-`           `"password": "securepassword" 
+            "password": "securepassword" 
 
 } 
 
-**Example Response**:json 
+**Example Response**:
+```json 
 
 { 
 
-`  `"message": "Account created successfully for user 'newuser123'." 
+    "message": "Account created successfully for user 'newuser123'." 
 
-} 
+}
+```
 
-**/login** 
+## **/login** 
 
 - **Request Type**: POST 
 - **Purpose**: Authenticates a user by verifying the provided username and password. 
@@ -128,53 +138,63 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 200 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"message": "User 'newuser123' authenticated successfully." 
+    "message": "User 'newuser123' authenticated successfully." 
 
-} 
+}
+```
 
 - **Error Response Example** (e.g., invalid credentials): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." 
+    "error": "Invalid username or password." 
 
-} 
+}
+```
 
 - **Error Response Example** (unexpected error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Internal server error." 
+    "error": "Internal server error." 
 
-} 
+}
+```
 
-- **Example Request**:json 
-
-  { 
-
-`      `"username": "newuser123", 
-
-`      `"password": "securepassword" 
-
-} 
-
-- **Example Response**:json 
+- **Example Request**:
+  ```json 
 
   { 
 
-`      `"message": "User 'newuser123' authenticated successfully."**     } 
+      "username": "newuser123", 
 
-**/update-password** 
+      "password": "securepassword" 
+
+} 
+```
+- **Example Response**:
+```json 
+
+  { 
+
+      "message": "User 'newuser123' authenticated successfully."**
+  }
+```
+
+## **/update-password** 
 
 - **Request Type**: POST 
 - **Purpose**: Updates a user's password by verifying the current password and setting a new one. 
@@ -186,64 +206,73 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 200 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"message": "Password updated successfully for user       'newuser123'." } 
+    "message": "Password updated successfully for user       'newuser123'."
+}
+``` 
 
 - **Error Response Example** (e.g., missing fields): 
 - **Code**: 400 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid request payload. 'username', 'current\_password', and 'new\_password' are required." 
+    "error": "Invalid request payload. 'username', 'current\_password', and 'new\_password' are required." 
 
 } 
-
+```
 - **Error Response Example** (invalid authentication): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." 
+    "error": "Invalid username or password." 
 
 } 
-
+```
 - **Error Response Example** (unexpected error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Internal server error." 
+    "error": "Internal server error." 
 
 } 
-
-- **Example Request**:json 
+```
+- **Example Request**:
+  ```json 
 
   { 
 
-`      `"username": "newuser123", 
+        "username": "newuser123", 
 
-`      `"current\_password": "oldpassword", 
+        "current\_password": "oldpassword", 
 
-`      `"new\_password": "newsecurepassword" 
+        "new\_password": "newsecurepassword" 
 
 } 
-
-- **Example Response**:json 
+```
+- **Example Response**:
+```json 
 
   { 
 
-`       `"message": "Password updated successfully for user 'newuser123'."**     }  
-
-**/api/favorites (POST)** 
+      "message": "Password updated successfully for user 'newuser123'."**
+  }
+```
+## **/api/favorites (POST)** 
 
 - **Request Type**: POST 
 - **Purpose**: Adds a new favorite location for a user. 
@@ -255,86 +284,93 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 201 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"message": "Favorite location 'Paris' added successfully.", 
+    "message": "Favorite location 'Paris' added successfully.", 
 
-`  `"favorite\_location": { 
+    "favorite\_location": { 
 
-`    `"id": 1, 
+    "id": 1, 
 
-`    `"location\_name": "Paris", 
+    "location\_name": "Paris", 
 
-`    `"latitude": 48.8566, 
+    "latitude": 48.8566, 
 
-`    `"longitude": 2.3522 
-
-`  `} 
+    "longitude": 2.3522 
 
 } 
-
+} 
+```
 - **Error Response Example** (e.g., missing location\_name): 
 - **Code**: 400 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid request payload. 'location\_name' is required." } 
-
+    "error": "Invalid request payload. 'location\_name' is required."
+} 
+```
 - **Error Response Example** (authentication failure): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." 
+    "error": "Invalid username or password." 
 
 } 
-
+```
 - **Error Response Example** (unexpected error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Internal server error." 
+    "error": "Internal server error." 
 
 } 
-
-- **Example Request**:json 
+```
+- **Example Request**:
+  ```json 
 
   { 
 
-`      `"username": "newuser123", 
+      "username": "newuser123", 
 
-`      `"password": "securepassword",       "location\_name": "Paris" 
+      "password": "securepassword",       "location\_name": "Paris" 
 
 } 
-
-- **Example Response**:json 
+```
+- **Example Response**:
+```json 
 
 { 
 
-`  `"message": "Favorite location 'Paris' added successfully.",   "favorite\_location": { 
+      "message": "Favorite location 'Paris' added successfully.",   "favorite\_location": { 
 
-`    `"id": 1, 
+      "id": 1, 
 
-`    `"location\_name": "Paris", 
+      "location\_name": "Paris", 
 
-`    `"latitude": 48.8566, 
+      "latitude": 48.8566, 
 
-`    `"longitude": 2.3522 
+      "longitude": 2.3522 
 
-`  `} 
+  } 
 
-} 
+}
+```
 
-**/api/favorites (GET)** 
+## **/api/favorites (GET)** 
 
 - **Request Type**: GET 
 - **Purpose**: Retrieves all favorite locations for a user. 
@@ -345,108 +381,116 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 200 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"favorites": [ 
+    "favorites": [ 
 
-`    `{ 
+      { 
 
-`      `"id": 1, 
+        "id": 1, 
 
-`      `"location\_name": "Paris", 
+        "location\_name": "Paris", 
 
-`      `"latitude": 48.8566, 
+        "latitude": 48.8566, 
 
-`      `"longitude": 2.3522 
+        "longitude": 2.3522 
 
-`    `}, 
+  }, 
 
-`    `{ 
+    { 
 
-`      `"id": 2, 
+        "id": 2, 
 
-`      `"location\_name": "New York",       "latitude": 40.7128, 
+        "location\_name": "New York",       "latitude": 40.7128, 
 
-`      `"longitude": -74.0060 
+        "longitude": -74.0060 
 
-`    `} 
+    } 
 
-`  `] 
+  ] 
 
 } 
-
+```
 - **Error Response Example** (missing query parameters): 
 - **Code**: 400 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Missing 'username' or 'password' query parameters." 
+    "error": "Missing 'username' or 'password' query parameters." 
 
-} 
+}
+```
 
 - **Error Response Example** (authentication failure): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." 
+    "error": "Invalid username or password." 
 
 } 
-
+```
 - **Error Response Example** (unexpected error): 
 - **Code**: 500 
 
-10 of 21
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Internal server error." } 
+    "error": "Internal server error."
+}
+``` 
 
-- **Example Request**:bash 
+- **Example Request**:
+  ```bash 
 
   GET /api/favorites?username=newuser123&password=securepassword 
-
-- **Example Response**:json 
-
+  ```
+- **Example Response**:
+  ```json 
 { 
 
-`  `"favorites": [ 
+    "favorites": [ 
 
-`    `{ 
+      { 
 
-`      `"id": 1, 
+        "id": 1, 
 
-`      `"location\_name": "Paris", 
+        "location\_name": "Paris", 
 
-`      `"latitude": 48.8566, 
+        "latitude": 48.8566, 
 
-`      `"longitude": 2.3522 
+        "longitude": 2.3522 
 
-`    `}, 
+  }, 
 
-`    `{ 
+    { 
 
-`      `"id": 2, 
+        "id": 2, 
 
-`      `"location\_name": "New York",       "latitude": 40.7128, 
+        "location\_name": "New York",       "latitude": 40.7128, 
 
-`      `"longitude": -74.0060 
+        "longitude": -74.0060 
 
-`    `} 
+    } 
 
-`  `] 
+  ] 
 
-**}** 
+  }
+  ```
 
-**/api/favorites/weather (GET)** 
+## **/api/favorites/weather (GET)** 
 
 - **Request Type**: GET 
 - **Purpose**: Retrieves all favorite locations for a user along with their current weather. 
@@ -459,155 +503,173 @@ docker run -d \
 • **Code**: 200 
 11 of 21
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"favorites": [ 
+    "favorites": [ 
 
-`    `{ 
+      { 
 
-`      `"id": 1, 
+        "id": 1, 
 
-`      `"location\_name": "Paris", 
+        "location\_name": "Paris", 
 
-`      `"latitude": 48.8566, 
+        "latitude": 48.8566, 
 
-`      `"longitude": 2.3522, 
+        "longitude": 2.3522, 
 
-`      `"current\_weather": { 
+        "current\_weather": { 
 
-`         `"time": "2024-12-10T15:30:00Z"         "temperature": 22.5 
+            "time": "2024-12-10T15:30:00Z"
 
-`         `"humidity": 60 
+            "temperature": 22.5
 
-`         `"windspeed": 5.5 
+            "humidity": 60 
 
-`         `"precipitation": 0.0 
+            "windspeed": 5.5 
 
-`      `} 
+            "precipitation": 0.0 
 
-`    `}, 
+        } 
 
-`    `{ 
+      }, 
 
-`      `"id": 2, 
+      { 
 
-`      `"location\_name": "New York", 
+        "id": 2, 
 
-`      `"latitude": 40.7128, 
+        "location\_name": "New York", 
 
-`      `"longitude": -74.0060, 
+        "latitude": 40.7128, 
 
-`      `"current\_weather": { 
+        "longitude": -74.0060, 
 
-`        `"time": "2024-12-10T15:30:00Z"         "temperature": 30.6 
+        "current\_weather": { 
 
-`         `"humidity": 70 
+              "time": "2024-12-10T15:30:00Z"
 
-`         `"windspeed": 6.5 
+              "temperature": 30.6 
 
-`         `"precipitation": 1.0 
+              "humidity": 70 
 
-`      `} 
+              "windspeed": 6.5 
 
-`    `} 
+              "precipitation": 1.0 
 
-`  `] 
+        } 
 
-} 
+      } 
+
+    ] 
+
+}
+```
 
 - **Error Response Example** (missing query parameters): 
 - **Code**: 400 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Missing 'username' or 'password' query parameters." } 
+    "error": "Missing 'username' or 'password' query parameters."
+} 
+```
 
-
-21 of 21
 
 - **Error Response Example** (authentication failure): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." 
+    "error": "Invalid username or password." 
 
 } 
-
+```
 - **Error Response Example** (unexpected error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Internal server error." 
+    "error": "Internal server error." 
 
 } 
-
-- **Example Request**:bash 
+```
+- **Example Request**:
+  ```bash 
 
   GET /api/favorites/weather?username=newuser123&password=securepassword 
-
-- **Example Response**:json 
+  ```
+- **Example Response**:
+```json 
 
 { 
 
-`  `"favorites": [ 
+    "favorites": [ 
 
-`    `{ 
+      { 
 
-`   `"id": 1, 
+        "id": 1, 
 
-`      `"location\_name": "Paris", 
+        "location\_name": "Paris", 
 
-`      `"latitude": 48.8566, 
+        "latitude": 48.8566, 
 
-`      `"longitude": 2.3522, 
+        "longitude": 2.3522, 
 
-`      `"current\_weather": { 
+        "current\_weather": { 
 
-`         `"time": "2024-12-10T15:30:00Z"         "temperature": 22.5 
+            "time": "2024-12-10T15:30:00Z"
 
-`         `"humidity": 60 
+            "temperature": 22.5 
 
-`         `"windspeed": 5.5 
+            "humidity": 60 
 
-`         `"precipitation": 0.0 
+            "windspeed": 5.5 
 
-`      `} 
+            "precipitation": 0.0 
 
-`    `}, 
+        } 
 
-`    `{ 
+      }, 
 
-`      `"id": 2, 
+      { 
 
-`      `"location\_name": "New York", 
+        "id": 2, 
 
-`      `"latitude": 40.7128, 
+        "location\_name": "New York", 
 
-`      `"longitude": -74.0060, 
+        "latitude": 40.7128, 
 
-`      `"current\_weather": { 
+        "longitude": -74.0060, 
 
-`        `"time": "2024-12-10T15:30:00Z"         "temperature": 30.6 
+        "current\_weather": { 
 
-`         `"humidity": 70 
+            "time": "2024-12-10T15:30:00Z"
 
-`         `"windspeed": 6.5 
+            "temperature": 30.6 
 
-`         `"precipitation": 1.0 
+            "humidity": 70 
 
-`    `}   ] } 
+            "windspeed": 6.5 
 
-**/api/favorites/int:favorite\_id/weather (GET)** 
+            "precipitation": 1.0 
+
+  }
+]
+
+} 
+```
+## **/api/favorites/int:favorite\_id/weather (GET)** 
 
 - **Request Type**: GET 
 - **Purpose**: Retrieves the current weather for a specific favorite location. 
@@ -620,105 +682,118 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 200 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"favorite\_location": { 
+    "favorite\_location": { 
 
-`   `"id": 1, 
+        "id": 1, 
 
-`   `"location\_name": "Paris", 
+        "location\_name": "Paris", 
 
-`    `"latitude": 48.8566, 
+        "latitude": 48.8566, 
 
-`    `"longitude": 2.3522, 
+        "longitude": 2.3522, 
 
-`     `"current\_weather": { 
+        "current\_weather": { 
 
-`         `"time": "2024-12-10T15:30:00Z" 
+            "time": "2024-12-10T15:30:00Z" 
 
-`        `"temperature": 22.5 
+            "temperature": 22.5 
 
-`         `"humidity": 60 
+            "humidity": 60 
 
-`         `"windspeed": 5.5 
+            "windspeed": 5.5 
 
-`         `"precipitation": 0.0   } 
+            "precipitation": 0.0   } 
 
 } 
-
+```
 - **Error Response Example** (missing query parameters): 
 - **Code**: 400 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Missing 'username' or 'password' query parameters." 
+    "error": "Missing 'username' or 'password' query parameters." 
 
-} 
+}
+```
 
 - **Error Response Example** (unauthorized access): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." } 
-
+    "error": "Invalid username or password."
+} 
+```
 - **Error Response Example** (favorite location not found): 
 - **Code**: 404 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Favorite location with ID '1' not found." } 
-
+    "error": "Favorite location with ID '1' not found."
+} 
+```
 - **Error Response Example** (internal error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Could not fetch weather data." } 
-
-- **Example Request**:bash 
+    "error": "Could not fetch weather data."
+} 
+```
+- **Example Request**:
+```bash 
 
   GET /api/favorites/1/weather?username=newuser123&password=securepassword 
-
-**Example Response**:json 
+```
+**Example Response**:
+```json 
 
 { 
 
-`  `"favorite\_location": { 
+    "favorite\_location": { 
 
-` `"id": 1, 
+      "id": 1, 
 
-` `"location\_name": "Paris", 
+      "location\_name": "Paris", 
 
-` `"latitude": 48.8566, 
+      "latitude": 48.8566, 
 
-` `"longitude": 2.3522, 
+      "longitude": 2.3522, 
 
-` `"current\_weather": { 
+      "current\_weather": { 
 
-`           `"time": "2024-12-10T15:30:00Z"            "temperature": 22.5 
+              "time": "2024-12-10T15:30:00Z"
 
-`           `"humidity": 60 
+              "temperature": 22.5 
 
-`           `"windspeed": 5.5 
+              "humidity": 60 
 
-`           `"precipitation": 0.0 
+              "windspeed": 5.5 
 
-`  `} 
+              "precipitation": 0.0 
+
+  } 
 
 } 
-
-**/api/favorites/int:favorite\_id/historical (GET)** 
+```
+## **/api/favorites/int:favorite\_id/historical (GET)** 
 
 - **Request Type**: GET 
 - **Purpose**: Retrieves historical weather data for a specific favorite location. 
@@ -733,121 +808,147 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 200 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"favorite\_location": { 
+    "favorite\_location": { 
 
-`    `"id": 1, 
+      "id": 1, 
 
-`    `"latitude": 48.8566, 
+      "latitude": 48.8566, 
 
-`    `"longitude": 2.3522 
+      "longitude": 2.3522 
 
-`  `}, 
+    }, 
 
-`  `"historical\_weather": [ 
+    "historical\_weather": [ 
 
-`    `{ 
+      { 
 
-`     `"date": "2024-12-01" 
+        "date": "2024-12-01" 
 
-`     `"temperature\_2m\_max": 15.2 
+        "temperature\_2m\_max": 15.2 
 
-`     `"temperature\_2m\_min": 10.5 
+        "temperature\_2m\_min": 10.5 
 
-`     `"apparent\_temperature\_max": 16.8       "apparent\_temperature\_min": 9.0  
+        "apparent\_temperature\_max": 16.8
 
-`     `"daylight\_duration": 9.8  
+        "apparent\_temperature\_min": 9.0  
 
-`     `"precipitation\_sum": 0.1 
+        "daylight\_duration": 9.8  
 
-`     `"precipitation\_probability\_max": 20      "wind\_speed\_10m\_max": 7.3 
+        "precipitation\_sum": 0.1 
 
-`     `… 
+        "precipitation\_probability\_max": 20
 
-`    `} 
+        "wind\_speed\_10m\_max": 7.3 
 
-`  `] 
+        … 
+
+      } 
+
+    ] 
 
 } 
-
+```
 - **Error Response Example** (missing query parameters): 
 - **Code**: 400 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Missing 'username', 'password', 'start\_date', or 'end\_date' query parameters." 
+    "error": "Missing 'username', 'password', 'start\_date', or 'end\_date' query parameters." 
 
 } 
-
+```
 - **Error Response Example** (unauthorized access): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." } 
-
+    "error": "Invalid username or password."
+}
+```
 - **Error Response Example** (favorite location not found): 
 - **Code**: 404 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Favorite location with ID '1' not found." } 
-
+    "error": "Favorite location with ID '1' not found."
+} 
+```
 - **Error Response Example** (internal error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Could not fetch historical weather data." } 
-
-- **Example Request**:bash 
+    "error": "Could not fetch historical weather data."
+} 
+```
+- **Example Request**:
+```bash 
 
   GET /api/favorites/1/historical? username=newuser123&password=securepassword&start\_date=2024-12-01&end \_date=2024-12-02 
+```
+**Example Response**:
+```json
+{ 
 
-**Example Response**:json { 
+    "favorite\_location": { 
 
-`  `"favorite\_location": { 
+      "id": 1, 
 
-`    `"id": 1, 
+      "latitude": 48.8566, 
 
-`    `"latitude": 48.8566, 
+      "longitude": 2.3522 
 
-`    `"longitude": 2.3522 
+    }, 
 
-`  `}, 
+    "historical\_weather": [ 
 
-`  `"historical\_weather": [ 
+      { 
 
-`     `"date": "2024-12-01" 
+        "date": "2024-12-01" 
 
-`     `"temperature\_2m\_max": 15.2 
+        "temperature\_2m\_max": 15.2 
 
-`     `"temperature\_2m\_min": 10.5 
+        "temperature\_2m\_min": 10.5 
 
-`     `"apparent\_temperature\_max": 16.8       "apparent\_temperature\_min": 9.0  
+        "apparent\_temperature\_max": 16.8
 
-`     `"daylight\_duration": 9.8  
+        "apparent\_temperature\_min": 9.0  
 
-`     `"precipitation\_sum": 0.1 
+        "daylight\_duration": 9.8  
 
-`     `"precipitation\_probability\_max": 20      "wind\_speed\_10m\_max": 7.3 
+        "precipitation\_sum": 0.1 
 
-… 
+        "precipitation\_probability\_max": 20
 
-`  `] } 
+        "wind\_speed\_10m\_max": 7.3 
 
-**/api/favorites/int:favorite\_id/forecast (GET)** 
+        … 
+
+      } 
+
+    ] 
+
+} 
+```
+
+## **/api/favorites/int:favorite\_id/forecast (GET)** 
 
 - **Request Type**: GET 
 - **Purpose**: Retrieves the weather forecast for a specific favorite location. 
@@ -861,131 +962,144 @@ docker run -d \
 - **Success Response Example**: 
 - **Code**: 200 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"favorite\_location": [ 
+    "favorite\_location": [ 
 
-`         `"id": 123 
+          "id": 123 
 
-`         `"latitude": 40.7128 
+          "latitude": 40.7128 
 
-`         `"longitude": -74.0060  
+          "longitude": -74.0060  
 
 },  
 
 "historical\_weather": [  
 
-`      `{  
+        {  
 
-`           `"date": "2024-12-01" 
+            "date": "2024-12-01" 
 
-`           `"temperature\_2m\_max": 15.2 
+            "temperature\_2m\_max": 15.2 
 
-`           `"temperature\_2m\_min": 10.5 
+            "temperature\_2m\_min": 10.5 
 
-`           `"apparent\_temperature\_max": 16.8 
+            "apparent\_temperature\_max": 16.8 
 
-`           `"apparent\_temperature\_min": 9.0  
+            "apparent\_temperature\_min": 9.0  
 
-`           `"daylight\_duration": 9.8 
+            "daylight\_duration": 9.8 
 
-`           `"precipitation\_sum": 0.1 
+            "precipitation\_sum": 0.1 
 
-`           `"precipitation\_probability\_max": 20 
+            "precipitation\_probability\_max": 20 
 
-`           `"wind\_speed\_10m\_max": 7.3  
+            "wind\_speed\_10m\_max": 7.3  
 
-`      `}, 
+        }, 
+        … 
 
-`      `… 
-
-`  `] 
+    ] 
 
 } 
-
+```
 - **Error Response Example** (missing query parameters): 
 - **Code**: 400 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Missing 'username' or 'password' query parameters." } 
-
+    "error": "Missing 'username' or 'password' query parameters."
+} 
+```
 - **Error Response Example** (unauthorized access): 
 - **Code**: 401 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Invalid username or password." } 
-
+    "error": "Invalid username or password."
+} 
+```
 - **Error Response Example** (favorite location not found): 
 - **Code**: 404 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Favorite location with ID '1' not found." } 
-
+    "error": "Favorite location with ID '1' not found."
+} 
+```
 - **Error Response Example** (internal error): 
 - **Code**: 500 
 
-**Content**:json 
+**Content**:
+```json 
 
 { 
 
-`  `"error": "Could not fetch weather forecast data." } 
-
-- **Example Request**:bash 
+    "error": "Could not fetch weather forecast data."
+} 
+```
+- **Example Request**:
+```bash 
 
   GET /api/favorites/1/forecast? username=newuser123&password=securepassword&days=5 
+```
+- **Example Response**:
+```json
+{ 
 
-- **Example Response**:json 
+    "favorite\_location": [ 
 
-  { 
+          "id": 123 
 
-`  `"favorite\_location": [ 
+          "latitude": 40.7128 
 
-`         `"id": 123 
-
-`         `"latitude": 40.7128 
-
-`         `"longitude": -74.0060  
+          "longitude": -74.0060  
 
 },  
 
 "historical\_weather": [  
 
-`      `{  
+        {  
 
-`           `"date": "2024-12-01" 
+            "date": "2024-12-01" 
 
-`           `"temperature\_2m\_max": 15.2 
+            "temperature\_2m\_max": 15.2 
 
-`           `"temperature\_2m\_min": 10.5 
+            "temperature\_2m\_min": 10.5 
 
-`           `"apparent\_temperature\_max": 16.8            "apparent\_temperature\_min": 9.0  
+            "apparent\_temperature\_max": 16.8 
 
-`           `"daylight\_duration": 9.8 
+            "apparent\_temperature\_min": 9.0  
 
-`           `"precipitation\_sum": 0.1 
+            "daylight\_duration": 9.8 
 
-`           `"precipitation\_probability\_max": 20            "wind\_speed\_10m\_max": 7.3  
+            "precipitation\_sum": 0.1 
 
-`      `}, 
+            "precipitation\_probability\_max": 20 
 
-`      `… 
+            "wind\_speed\_10m\_max": 7.3  
 
-`  `] 
+        }, 
+        … 
+
+    ] 
 
 } 
+```
 
-**/api/health** 
+## **/api/health** 
 
 - **Request Type:** GET 
 - **Purpose:** Verifies if the service is running and healthy. 
@@ -993,21 +1107,24 @@ docker run -d \
 - **Response Format:** JSON 
 - **Success Response Example:** 
   - Code: 200 
-  - Content:  
+  - Content:
+    ```json 
 
-`         `{ "status": "healthy" } 
-
+      { "status": "healthy" } 
+    ```
 - **Example Request:** 
 
   No request body needed for this endpoint. 
 
-- **Example Response:** json** 
+- **Example Response:**
+  ```json 
 
-`             `{ 
+  { 
+              "status": "healthy"
+  }
+  ```
 
-`                     `"status": "healthy"              } 
-
-**Testing** 
+## **Testing** 
 
 **Unit Tests** 
 
@@ -1021,7 +1138,7 @@ Smoke tests are ran to make sure that important features are working accurately:
 
 sh smoktest.sh
 
-**Dependencies** 
+## **Dependencies** 
 
 - **Python libraries:**  
   - Flask
