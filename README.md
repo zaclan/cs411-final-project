@@ -223,7 +223,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
 { 
 
-    "error": "Invalid request payload. 'username', 'current\_password', and 'new\_password' are required." 
+    "error": "Invalid request payload. 'username', 'current_password', and 'new_password' are required." 
 
 } 
 ```
