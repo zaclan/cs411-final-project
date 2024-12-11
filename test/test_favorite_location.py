@@ -162,3 +162,36 @@ def test_get_historical_weather_invalid(session):
             end_date="2024-12-32"     # Invalid day
         )
     assert "Invalid date format." in str(exc_info.value)
+
+def test_get_forecast_details_success(session):
+    """
+    Test retrieving forecast details for an existing favorite location.
+    """
+    # Create a test user
+    user = Users.create_user("testuser", "password123")
+
+    # Create a favorite location for the user
+    fav = FavoriteLocation.create_favorite(user_id=user.id, location_name="Paris", latitude=48.8566, longitude=2.3522)
+
+    # Retrieve forecast details
+    details_id, details_location, details_lat, details_long = FavoriteLocation.get_forecast_details(favorite_id=fav.id, user_id=user.id)
+
+    # Assertions
+    assert details_id == fav.id
+    assert details_location == "Paris"
+    assert details_lat == 48.8566
+    assert details_long == 2.3522
+
+def test_get_forecast_details_not_found(session):
+    """
+    Test retrieving forecast details for a non-existent favorite location.
+    """
+    # Create a test user
+    user = Users.create_user("testuser", "password123")
+
+    # Attempt to retrieve forecast details for a non-existent favorite location
+    with pytest.raises(ValueError) as exc_info:
+        FavoriteLocation.get_forecast_details(favorite_id=999, user_id=user.id)
+
+    # Assertions
+    assert "not found" in str(exc_info.value)
