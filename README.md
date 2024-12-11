@@ -850,9 +850,27 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "wind_speed_10m_max": 7.3 
 
-        '. . .' 
+      }
 
-      } 
+    {
+        "date": "2024-11-30" 
+
+        "temperature_2m_max": 16.2 
+
+        "temperature_2m_min": 11.5 
+
+        "apparent_temperature_max": 17.8
+
+        "apparent_temperature_min": 8.0  
+
+        "daylight_duration": 8.8  
+
+        "precipitation_sum": 0.2
+
+        "precipitation_probability_max": 22
+
+        "wind_speed_10m_max": 6.0
+    }
 
     ] 
 
@@ -942,11 +960,28 @@ The API uses Docker for containerisation. The user and location data is stored i
 
         "precipitation_probability_max": 20
 
-        "wind_speed_10m_max": 7.3 
+        "wind_speed_10m_max": 7.3
 
-        '. . .'
+      }
+    {
+        "date": "2024-11-30" 
 
-      } 
+        "temperature_2m_max": 16.2 
+
+        "temperature_2m_min": 11.5 
+
+        "apparent_temperature_max": 17.8
+
+        "apparent_temperature_min": 8.0  
+
+        "daylight_duration": 8.8  
+
+        "precipitation_sum": 0.2
+
+        "precipitation_probability_max": 22
+
+        "wind_speed_10m_max": 6.0
+    }
 
     ] 
 
@@ -982,7 +1017,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
     ]  
 
-"historical_weather": [  
+"weather_forecast": [  
 
         {  
 
@@ -1005,7 +1040,30 @@ The API uses Docker for containerisation. The user and location data is stored i
             "wind_speed_10m_max": 7.3  
 
         }
-        '. . .' 
+        {  
+
+            "date": "2024-12-02" 
+
+            "temperature_2m_max": 16.0
+
+            "temperature_2m_min": 9.0 
+
+            "apparent_temperature_max": 16.8 
+
+            "apparent_temperature_min": 7 
+
+            "daylight_duration": 9.9 
+
+            "precipitation_sum": 0.2 
+
+            "precipitation_probability_max": 19
+
+            "wind_speed_10m_max": 6.4 
+
+        }
+         
+         
+         
 
     ] 
 
@@ -1074,7 +1132,7 @@ The API uses Docker for containerisation. The user and location data is stored i
 
     ] 
 
-"historical_weather": [  
+"weather_forecast": [  
 
         {  
 
@@ -1097,7 +1155,27 @@ The API uses Docker for containerisation. The user and location data is stored i
             "wind_speed_10m_max": 7.3  
 
         }, 
-        '. . .'
+        {  
+
+            "date": "2024-12-02" 
+
+            "temperature_2m_max": 16.0
+
+            "temperature_2m_min": 9.0 
+
+            "apparent_temperature_max": 16.8 
+
+            "apparent_temperature_min": 7 
+
+            "daylight_duration": 9.9 
+
+            "precipitation_sum": 0.2 
+
+            "precipitation_probability_max": 19
+
+            "wind_speed_10m_max": 6.4 
+
+        }
 
     ] 
 
