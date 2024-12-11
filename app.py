@@ -18,15 +18,15 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 def create_app(config_class=TestConfig):
-"""
-    Creates and configures the Flask application.
+    """
+        Creates and configures the Flask application.
 
-    Args:
-        config_class (class): The configuration class to use (default: TestConfig).
+        Args:
+            config_class (class): The configuration class to use (default: TestConfig).
 
-    Returns:
-        Flask: Configured Flask application instance.
-"""
+        Returns:
+            Flask: Configured Flask application instance.
+    """
     app = Flask(__name__)
     app.config.from_object(config_class)
     
